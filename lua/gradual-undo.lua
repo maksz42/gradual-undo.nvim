@@ -21,7 +21,7 @@ local function check_eol_and_redo()
   return cmd, eol
 end
 
-local function jump_to_last_do_position_or_do(todo, revert_cmd)
+local function do_or_do_not(todo, revert_cmd)
   local row_before, col_before = get_cursor_position()
   local cmd, eol = todo()
   local row_after, col_after = get_cursor_position()
@@ -31,20 +31,20 @@ local function jump_to_last_do_position_or_do(todo, revert_cmd)
   end
 end
 
-function M.jump_to_last_undo_position_or_undo()
-  jump_to_last_do_position_or_do(undo_and_check_eol, 'redo')
+function M.undo()
+  do_or_do_not(undo_and_check_eol, 'redo')
 end
 
-function M.jump_to_last_redo_position_or_redo()
-  jump_to_last_do_position_or_do(check_eol_and_redo, 'undo')
+function M.redo()
+  do_or_do_not(check_eol_and_redo, 'undo')
 end
 
 function M.setup(opts)
   opts = opts or {}
 
   if opts.map_default_keys == true or opts.map_default_keys == nil then
-    vim.keymap.set('n', 'u', M.jump_to_last_undo_position_or_undo)
-    vim.keymap.set('n', '<c-r>', M.jump_to_last_redo_position_or_redo)
+    vim.keymap.set('n', 'u', M.undo)
+    vim.keymap.set('n', '<c-r>', M.redo)
   end
 end
 
