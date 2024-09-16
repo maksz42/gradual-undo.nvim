@@ -6,19 +6,17 @@ https://www.reddit.com/r/neovim/comments/xij4yn/how_to_configure_undo_the_way_an
 
 ## Installation
 
-Simply use your favorite plugin manager to install it, for example:
+### lazy.nvim
 
 ```lua
-Plug 'EtiamNullam/gradual-undo.nvim'
+{
+  "maksz42/gradual-undo.nvim",
+  keys = {
+    { "u", function() require("gradual-undo").undo() end },
+    { "<C-r>", function() require("gradual-undo").redo() end },
+  },
+}
 ```
-
-...then call:
-
-```lua
-require('gradual-undo').setup()
-```
-
-...to load with default configuration, which will override `u` and `<c-r>` in `normal` mode.
 
 ## Manual usage
 

@@ -28,13 +28,4 @@ function M.redo()
   do_or_do_not('redo', 'undo')
 end
 
-function M.setup(opts)
-  opts = opts or {}
-
-  if opts.map_default_keys == true or opts.map_default_keys == nil then
-    vim.keymap.set('n', 'u', M.undo)
-    vim.keymap.set('n', '<c-r>', M.redo)
-  end
-end
-
 return M
