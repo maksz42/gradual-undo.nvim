@@ -19,7 +19,7 @@ local function do_or_do_not(cmd, revert_cmd)
   vim.cmd(cmd)
   local row_after, col_after = get_cursor_position()
   eol = eol or is_cursor_at_eol()
-  if row_before ~= row_after or (col_before ~= col_after and not eol) then
+  if (row_before ~= row_after or col_before ~= col_after) and not eol then
     vim.cmd(revert_cmd)
     set_cursor_position(row_after, col_after)
     print('gradual-undo: Jumped to last ' .. cmd .. ' location')
