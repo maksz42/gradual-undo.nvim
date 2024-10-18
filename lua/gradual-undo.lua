@@ -5,23 +5,18 @@ local function get_cursor_position()
   return row, col
 end
 
-local function set_cursor_position(row, col)
-  vim.fn.setcursorcharpos(row, col)
-end
-
-local function is_cursor_at_eol()
-  return vim.fn.col('.') >= vim.fn.col('$') - 1
-end
-
 local function do_or_do_not(cmd, revert_cmd)
-  local row_before, col_before = get_cursor_position()
-  local eol = is_cursor_at_eol()
+  local row_original, col_original = get_cursor_position()
   vim.cmd(cmd)
-  local row_after, col_after = get_cursor_position()
-  eol = eol or is_cursor_at_eol()
-  if (row_before ~= row_after or col_before ~= col_after) and not eol then
-    vim.cmd(revert_cmd)
-    set_cursor_position(row_after, col_after)
+  local row_after_cmd, col_after_cmd = get_cursor_position()
+  if row_original == row_after_cmd and col_original == col_after_cmd then
+    return
+  end
+  vim.cmd(revert_cmd)
+  local row_after_revert, col_after_revert = get_cursor_position()
+  if row_original == row_after_revert and col_original == col_after_revert then
+    vim.cmd(cmd)
+  else
     print('gradual-undo: Jumped to last ' .. cmd .. ' location')
   end
 end
