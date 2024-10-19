@@ -1,20 +1,19 @@
 local M = {}
 
 local function get_cursor_position()
-  local _, row, col = unpack(vim.fn.getcursorcharpos())
-  return row, col
+  return vim.fn.getcharpos('.')
 end
 
 local function do_or_do_not(cmd, revert_cmd)
-  local row_original, col_original = get_cursor_position()
+  local pos_original = get_cursor_position()
   vim.cmd(cmd)
-  local row_after_cmd, col_after_cmd = get_cursor_position()
-  if row_original == row_after_cmd and col_original == col_after_cmd then
+  local pos_after_cmd = get_cursor_position()
+  if vim.deep_equal(pos_original, pos_after_cmd) then
     return
   end
   vim.cmd(revert_cmd)
-  local row_after_revert, col_after_revert = get_cursor_position()
-  if row_original == row_after_revert and col_original == col_after_revert then
+  local pos_after_revert = get_cursor_position()
+  if vim.deep_equal(pos_original, pos_after_revert) then
     vim.cmd(cmd)
   else
     print('gradual-undo: Jumped to last ' .. cmd .. ' location')
