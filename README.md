@@ -1,6 +1,6 @@
 # gradual-undo.nvim
 
-Fork of [EtiamNullam/gradual-undo.nvim](https://github.com/EtiamNullam/gradual-undo.nvim)
+Undo/redo like in IntelliJ IDEA and Android Studio
 
 ## Installation
 
